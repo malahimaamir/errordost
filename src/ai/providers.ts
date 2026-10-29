@@ -11,7 +11,7 @@ import { ClaudeCodeProvider } from './claudeCodeProvider';
 /** A concrete provider (not the 'auto' / 'none' pseudo-providers). */
 export type ConcreteProviderId = Exclude<ProviderId, 'auto' | 'none'>;
 
-/** Default model per provider, used when `errorbuddy.model` is empty. Copilot: '' = first available model. */
+/** Default model per provider, used when `errordost.model` is empty. Copilot: '' = first available model. */
 export const DEFAULT_MODELS: Readonly<Record<ConcreteProviderId, string>> = {
   copilot: '',
   'claude-code': 'haiku',
@@ -21,7 +21,7 @@ export const DEFAULT_MODELS: Readonly<Record<ConcreteProviderId, string>> = {
   ollama: 'llama3.2',
 };
 
-/** Order tried when `errorbuddy.aiProvider` is 'auto'. Key providers only count if a key is stored. */
+/** Order tried when `errordost.aiProvider` is 'auto'. Key providers only count if a key is stored. */
 export const AUTO_ORDER: readonly ConcreteProviderId[] = ['copilot', 'claude-code', 'ollama', 'claude', 'openai', 'gemini'];
 
 /** Providers that need an API key stored in SecretStorage. */
@@ -29,12 +29,12 @@ export const KEY_PROVIDERS = ['claude', 'openai', 'gemini'] as const;
 export type KeyProviderId = (typeof KEY_PROVIDERS)[number];
 
 export function secretKey(id: KeyProviderId | ProviderId): string {
-  return `errorbuddy.apiKey.${id}`;
+  return `errordost.apiKey.${id}`;
 }
 
 /**
  * Creates a concrete provider. Returns undefined for 'none' and 'auto' (use pickProvider for auto).
- * The `errorbuddy.model` override only applies when a specific provider is selected, since a
+ * The `errordost.model` override only applies when a specific provider is selected, since a
  * model name rarely makes sense across several providers.
  */
 export function createProvider(id: ProviderId, secrets: vscode.SecretStorage): AIProvider | undefined {

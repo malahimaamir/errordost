@@ -40,9 +40,9 @@ export class ClaudeCodeProvider implements AIProvider {
   async generate(system: string, user: string, signal?: AbortSignal): Promise<string> {
     // The model name goes on a shell command line on Windows: only allow plain model ids/aliases.
     if (!/^[\w.:/[\]-]+$/.test(this.model)) {
-      throw new Error(`Invalid Claude Code model name "${this.model}". Check "errorbuddy.model".`);
+      throw new Error(`Invalid Claude Code model name "${this.model}". Check "errordost.model".`);
     }
-    const dir = await mkdtemp(join(tmpdir(), 'errorbuddy-'));
+    const dir = await mkdtemp(join(tmpdir(), 'errordost-'));
     try {
       const systemFile = join(dir, 'system.txt');
       await writeFile(systemFile, system, 'utf8');

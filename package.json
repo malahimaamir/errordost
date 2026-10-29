@@ -1,6 +1,6 @@
 {
-  "name": "errorbuddy",
-  "displayName": "ErrorBuddy – Explain Errors in Urdu, Hindi, Arabic & English",
+  "name": "errordost",
+  "displayName": "ErrorDost – Explain Errors in Urdu, Hindi, Arabic & English",
   "description": "One-click, beginner-friendly error explanations in Urdu, Roman Urdu, Hindi, Arabic or English: what it means, why it happened and how to fix it. Works offline for common errors and uses your own AI (Copilot, Claude, Ollama…) for the rest. JS/TS, Python, HTML, CSS, Java, C/C++, PHP.",
   "version": "0.1.0",
   "publisher": "malahimaamir",
@@ -10,12 +10,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/malahimaamir/errorbuddy.git"
+    "url": "https://github.com/malahimaamir/errordost.git"
   },
   "bugs": {
-    "url": "https://github.com/malahimaamir/errorbuddy/issues"
+    "url": "https://github.com/malahimaamir/errordost/issues"
   },
-  "homepage": "https://github.com/malahimaamir/errorbuddy#readme",
+  "homepage": "https://github.com/malahimaamir/errordost#readme",
   "icon": "media/icon.png",
   "engines": {
     "vscode": "^1.93.0"
@@ -68,80 +68,80 @@
   "contributes": {
     "commands": [
       {
-        "command": "errorbuddy.explainSelection",
+        "command": "errordost.explainSelection",
         "title": "Explain Selected Error",
-        "category": "ErrorBuddy"
+        "category": "ErrorDost"
       },
       {
-        "command": "errorbuddy.explainText",
+        "command": "errordost.explainText",
         "title": "Explain an Error (paste)",
-        "category": "ErrorBuddy"
+        "category": "ErrorDost"
       },
       {
-        "command": "errorbuddy.chooseLanguage",
+        "command": "errordost.chooseLanguage",
         "title": "Choose Explanation Language",
-        "category": "ErrorBuddy"
+        "category": "ErrorDost"
       },
       {
-        "command": "errorbuddy.setApiKey",
+        "command": "errordost.setApiKey",
         "title": "Set AI API Key",
-        "category": "ErrorBuddy"
+        "category": "ErrorDost"
       },
       {
-        "command": "errorbuddy.clearCache",
+        "command": "errordost.clearCache",
         "title": "Clear Explanation Cache",
-        "category": "ErrorBuddy"
+        "category": "ErrorDost"
       },
       {
-        "command": "errorbuddy.explainDiagnostic",
+        "command": "errordost.explainDiagnostic",
         "title": "Explain This Error",
-        "category": "ErrorBuddy"
+        "category": "ErrorDost"
       },
       {
-        "command": "errorbuddy.explainTerminalSelection",
+        "command": "errordost.explainTerminalSelection",
         "title": "Explain Selected Error",
-        "category": "ErrorBuddy"
+        "category": "ErrorDost"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "errorbuddy.explainDiagnostic",
+          "command": "errordost.explainDiagnostic",
           "when": "false"
         },
         {
-          "command": "errorbuddy.explainTerminalSelection",
+          "command": "errordost.explainTerminalSelection",
           "when": "false"
         },
         {
-          "command": "errorbuddy.explainSelection",
+          "command": "errordost.explainSelection",
           "when": "editorHasSelection"
         }
       ],
       "editor/context": [
         {
-          "command": "errorbuddy.explainSelection",
+          "command": "errordost.explainSelection",
           "when": "editorHasSelection",
-          "group": "errorbuddy"
+          "group": "errordost"
         }
       ],
       "terminal/context": [
         {
-          "command": "errorbuddy.explainTerminalSelection",
+          "command": "errordost.explainTerminalSelection",
           "when": "terminalTextSelected",
-          "group": "errorbuddy"
+          "group": "errordost"
         },
         {
-          "command": "errorbuddy.explainText",
+          "command": "errordost.explainText",
           "when": "!terminalTextSelected",
-          "group": "errorbuddy"
+          "group": "errordost"
         }
       ]
     },
     "configuration": {
-      "title": "ErrorBuddy",
+      "title": "ErrorDost",
       "properties": {
-        "errorbuddy.language": {
+        "errordost.language": {
           "type": "string",
           "enum": [
             "",
@@ -160,7 +160,7 @@
             "العربية (Arabic)"
           ],
           "enumDescriptions": [
-            "Not chosen yet: ErrorBuddy asks the first time it runs.",
+            "Not chosen yet: ErrorDost asks the first time it runs.",
             "English: simple, plain English.",
             "اردو: Urdu in Nastaliq script, right-to-left.",
             "Roman Urdu: Urdu written in English letters (e.g. \"Yeh error is liye aaya...\").",
@@ -168,10 +168,10 @@
             "العربية: Arabic, right-to-left."
           ],
           "default": "",
-          "markdownDescription": "Language errors are explained in. Leave empty to be asked on first use. Change it any time with **ErrorBuddy: Choose Explanation Language**.",
+          "markdownDescription": "Language errors are explained in. Leave empty to be asked on first use. Change it any time with **ErrorDost: Choose Explanation Language**.",
           "order": 0
         },
-        "errorbuddy.level": {
+        "errordost.level": {
           "type": "string",
           "enum": [
             "beginner",
@@ -185,7 +185,7 @@
           "description": "How detailed and technical the explanations are.",
           "order": 1
         },
-        "errorbuddy.aiProvider": {
+        "errordost.aiProvider": {
           "type": "string",
           "enum": [
             "auto",
@@ -201,9 +201,9 @@
             "Use the first available: GitHub Copilot → Claude Code → Ollama → an API key you saved.",
             "GitHub Copilot via the VS Code Language Model API (no API key needed).",
             "Claude Code CLI: uses your existing Claude Code login, no API key needed.",
-            "Anthropic Claude: requires an API key (ErrorBuddy: Set AI API Key).",
-            "OpenAI: requires an API key (ErrorBuddy: Set AI API Key).",
-            "Google Gemini: requires an API key (ErrorBuddy: Set AI API Key).",
+            "Anthropic Claude: requires an API key (ErrorDost: Set AI API Key).",
+            "OpenAI: requires an API key (ErrorDost: Set AI API Key).",
+            "Google Gemini: requires an API key (ErrorDost: Set AI API Key).",
             "Local Ollama server: free and fully offline.",
             "No AI: only the built-in offline knowledge base of common errors."
           ],
@@ -211,48 +211,48 @@
           "description": "AI used for errors that are not in the offline knowledge base. Only the error message and a few sanitized lines around it are sent.",
           "order": 2
         },
-        "errorbuddy.model": {
+        "errordost.model": {
           "type": "string",
           "default": "",
           "markdownDescription": "Optional model name override for the selected provider (e.g. `gpt-4o-mini`, `llama3.1`, `sonnet`). Leave empty for the provider's default. Ignored when **AI Provider** is `auto`.",
           "order": 3
         },
-        "errorbuddy.ollamaUrl": {
+        "errordost.ollamaUrl": {
           "type": "string",
           "default": "http://localhost:11434",
           "description": "Base URL of your Ollama server.",
           "order": 4,
           "scope": "machine"
         },
-        "errorbuddy.claudeCodePath": {
+        "errordost.claudeCodePath": {
           "type": "string",
           "default": "claude",
           "scope": "machine",
           "markdownDescription": "Command or full path of the Claude Code CLI, used when **AI Provider** is `claude-code` or `auto`.",
           "order": 5
         },
-        "errorbuddy.knowledgeBaseFirst": {
+        "errordost.knowledgeBaseFirst": {
           "type": "boolean",
           "default": true,
           "description": "Show the offline answer instantly when a common error is recognized (with a button to ask AI for more). Turn off to always ask AI first.",
           "order": 6
         },
-        "errorbuddy.terminal.enabled": {
+        "errordost.terminal.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Offer to explain when a command in the integrated terminal fails (needs terminal shell integration).",
           "order": 7
         },
-        "errorbuddy.codeActions.enabled": {
+        "errordost.codeActions.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Show an \"Explain this error\" 💡 quick fix on errors and warnings in the editor.",
           "order": 8
         },
-        "errorbuddy.hover.enabled": {
+        "errordost.hover.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Show an \"Explain with ErrorBuddy\" link when hovering over an error.",
+          "description": "Show an \"Explain with ErrorDost\" link when hovering over an error.",
           "order": 9
         }
       }

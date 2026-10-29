@@ -25,7 +25,7 @@ export class OpenAIProvider implements AIProvider {
 
   async generate(system: string, user: string, signal?: AbortSignal): Promise<string> {
     const apiKey = await this.secrets.get(this.secretKey);
-    if (!apiKey) throw new Error('No OpenAI API key set. Run "ErrorBuddy: Set AI API Key".');
+    if (!apiKey) throw new Error('No OpenAI API key set. Run "ErrorDost: Set AI API Key".');
 
     const data = (await postJson(API_URL, {
       label: 'OpenAI',

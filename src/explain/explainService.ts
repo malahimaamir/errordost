@@ -9,7 +9,7 @@ import { ExplainPanel } from '../ui/explainPanel';
 import { redactSecrets, sanitizeMessage } from './sanitize';
 import { buildExplainPrompt, parseExplanation } from './explainPrompt';
 
-const CACHE_KEY = 'errorbuddy.cache';
+const CACHE_KEY = 'errordost.cache';
 const CACHE_MAX = 200;
 const KB_LABEL = 'Offline knowledge base';
 
@@ -49,7 +49,7 @@ export class ExplainService implements vscode.Disposable {
       snippet: err.snippet ? redactSecrets(err.snippet) : undefined,
     };
     if (!clean.message) {
-      void vscode.window.showInformationMessage('ErrorBuddy: there is no error text to explain.');
+      void vscode.window.showInformationMessage('ErrorDost: there is no error text to explain.');
       return;
     }
 
@@ -86,7 +86,7 @@ export class ExplainService implements vscode.Disposable {
       const raw = await vscode.window.withProgress(
         {
           location: vscode.ProgressLocation.Notification,
-          title: `ErrorBuddy is explaining… (${provider.label})`,
+          title: `ErrorDost is explaining… (${provider.label})`,
           cancellable: true,
         },
         async (_progress, token) => {
@@ -119,9 +119,9 @@ export class ExplainService implements vscode.Disposable {
       const fallback = kbExplanation();
       if (fallback) {
         this.show(clean, fallback, language, level);
-        void vscode.window.showWarningMessage(`ErrorBuddy: ${provider.label} failed (${reason}). Showing the offline explanation.`);
+        void vscode.window.showWarningMessage(`ErrorDost: ${provider.label} failed (${reason}). Showing the offline explanation.`);
       } else {
-        void vscode.window.showErrorMessage(`ErrorBuddy: could not explain this error with ${provider.label} (${reason}).`);
+        void vscode.window.showErrorMessage(`ErrorDost: could not explain this error with ${provider.label} (${reason}).`);
       }
     } finally {
       if (this.inFlight === controller) this.inFlight = undefined;
@@ -149,11 +149,11 @@ export class ExplainService implements vscode.Disposable {
   private async offerAiSetup(message: string): Promise<void> {
     const setKey = 'Set API Key';
     const choose = 'Choose AI provider';
-    const pick = await vscode.window.showInformationMessage(`ErrorBuddy: ${message}`, setKey, choose);
+    const pick = await vscode.window.showInformationMessage(`ErrorDost: ${message}`, setKey, choose);
     if (pick === setKey) {
-      await vscode.commands.executeCommand('errorbuddy.setApiKey');
+      await vscode.commands.executeCommand('errordost.setApiKey');
     } else if (pick === choose) {
-      await vscode.commands.executeCommand('workbench.action.openSettings', 'errorbuddy.aiProvider');
+      await vscode.commands.executeCommand('workbench.action.openSettings', 'errordost.aiProvider');
     }
   }
 
@@ -202,7 +202,7 @@ function cacheKey(err: ErrorContext, language: UiLanguage, level: Level): string
 
 const BASIC_HELP: Record<UiLanguage, ExplanationText> = {
   english: {
-    meaning: 'ErrorBuddy has no offline explanation for this error, and no AI provider is set up yet.',
+    meaning: 'ErrorDost has no offline explanation for this error, and no AI provider is set up yet.',
     cause: 'Most errors come from a typo, a missing import or package, a wrong type/value, or code running in the wrong order.',
     fix: [
       'Read the first line of the error carefully — it usually names the problem.',

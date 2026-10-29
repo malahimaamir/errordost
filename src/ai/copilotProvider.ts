@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import type { AIProvider } from '../types';
 import { requireText } from './http';
 
-const JUSTIFICATION = 'ErrorBuddy uses Copilot to explain the error you selected in simple words, in your language.';
+const JUSTIFICATION = 'ErrorDost uses Copilot to explain the error you selected in simple words, in your language.';
 
 /** GitHub Copilot via the VS Code Language Model API (no API key needed). */
 export class CopilotProvider implements AIProvider {
@@ -28,7 +28,7 @@ export class CopilotProvider implements AIProvider {
     if (!model) {
       throw new Error(
         this.family
-          ? `No Copilot model with family "${this.family}" is available. Clear "errorbuddy.model" or sign in to GitHub Copilot.`
+          ? `No Copilot model with family "${this.family}" is available. Clear "errordost.model" or sign in to GitHub Copilot.`
           : 'GitHub Copilot is not available. Install the Copilot Chat extension and sign in.',
       );
     }
@@ -63,11 +63,11 @@ function mapCopilotError(err: unknown, cancelled: boolean): Error {
   if (err instanceof vscode.LanguageModelError) {
     switch (err.code) {
       case vscode.LanguageModelError.NoPermissions.name:
-        return new Error('Allow ErrorBuddy to use Copilot: accept the permission prompt and try again.');
+        return new Error('Allow ErrorDost to use Copilot: accept the permission prompt and try again.');
       case vscode.LanguageModelError.Blocked.name:
         return new Error('Copilot blocked the request (quota or content policy). Try again later.');
       case vscode.LanguageModelError.NotFound.name:
-        return new Error('The selected Copilot model is no longer available. Check "errorbuddy.model".');
+        return new Error('The selected Copilot model is no longer available. Check "errordost.model".');
       default:
         return new Error(`Copilot error: ${err.message}`);
     }

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { UI_LANGUAGES, type Level, type ProviderId, type UiLanguage } from './types';
 
-export interface ErrorBuddyConfig {
+export interface ErrorDostConfig {
   /** '' = not chosen yet (first-run picker is shown). */
   language: UiLanguage | '';
   level: Level;
@@ -30,9 +30,9 @@ function str(value: unknown, fallback: string): string {
   return typeof value === 'string' ? value.trim() || fallback : fallback;
 }
 
-/** Reads and validates `errorbuddy.*`. Defaults mirror `contributes.configuration` in package.json. */
-export function getConfig(): ErrorBuddyConfig {
-  const c = vscode.workspace.getConfiguration('errorbuddy');
+/** Reads and validates `errordost.*`. Defaults mirror `contributes.configuration` in package.json. */
+export function getConfig(): ErrorDostConfig {
+  const c = vscode.workspace.getConfiguration('errordost');
   return {
     language: oneOf<UiLanguage | ''>(c.get('language'), UI_LANGUAGES, ''),
     level: oneOf(c.get('level'), LEVELS, 'beginner'),

@@ -95,8 +95,8 @@ export class ExplainPanel {
     }
     const mediaRoot = vscode.Uri.joinPath(ctx.extensionUri, 'media');
     const panel = vscode.window.createWebviewPanel(
-      'errorbuddy.explain',
-      'ErrorBuddy',
+      'errordost.explain',
+      'ErrorDost',
       { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
       { enableScripts: true, retainContextWhenHidden: false, localResourceRoots: [mediaRoot] },
     );
@@ -140,7 +140,7 @@ export class ExplainPanel {
     switch (m.type) {
       case 'copy':
         await vscode.env.clipboard.writeText(toPlainText(this.data));
-        vscode.window.setStatusBarMessage('$(check) ErrorBuddy: Copied', 2500);
+        vscode.window.setStatusBarMessage('$(check) ErrorDost: Copied', 2500);
         break;
       case 'reexplain': {
         const language = UI_LANGUAGES.includes(m.language as UiLanguage) ? (m.language as UiLanguage) : this.data.language;
@@ -183,7 +183,7 @@ export class ExplainPanel {
   }
 
   private render(): void {
-    this.panel.title = `ErrorBuddy — ${I18N[this.data.language].meaning}`;
+    this.panel.title = `ErrorDost — ${I18N[this.data.language].meaning}`;
     this.panel.webview.html = this.getHtml();
   }
 
@@ -232,7 +232,7 @@ export class ExplainPanel {
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource}; font-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="${cssUri}">
-<title>ErrorBuddy</title>
+<title>ErrorDost</title>
 </head>
 <body data-language="${language}" data-level="${level}" data-busy="${this.busy}" data-busy-text="${escapeHtml(t.busy)}">
 <header class="header">
@@ -305,7 +305,7 @@ export function toPlainText(data: ExplainPanelData): string {
     if (ex.codeExample.bad) out.push(`❌ ${t.bad}:`, ex.codeExample.bad, '');
     out.push(`✅ ${t.good}:`, ex.codeExample.good);
   }
-  out.push('', `— ErrorBuddy (${ex.providerLabel})`);
+  out.push('', `— ErrorDost (${ex.providerLabel})`);
   return out.join('\n');
 }
 

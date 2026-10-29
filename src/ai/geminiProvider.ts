@@ -24,7 +24,7 @@ export class GeminiProvider implements AIProvider {
 
   async generate(system: string, user: string, signal?: AbortSignal): Promise<string> {
     const apiKey = await this.secrets.get(this.secretKey);
-    if (!apiKey) throw new Error('No Gemini API key set. Run "ErrorBuddy: Set AI API Key".');
+    if (!apiKey) throw new Error('No Gemini API key set. Run "ErrorDost: Set AI API Key".');
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(this.model)}:generateContent`;
     const data = (await postJson(url, {

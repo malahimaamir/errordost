@@ -1,4 +1,4 @@
-// ErrorBuddy explanation webview script. Plain JS, no external libraries.
+// ErrorDost explanation webview script. Plain JS, no external libraries.
 (function () {
   // eslint-disable-next-line no-undef
   const vscode = acquireVsCodeApi();

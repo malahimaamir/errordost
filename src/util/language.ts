@@ -35,14 +35,14 @@ async function pickLanguage(current?: UiLanguage | ''): Promise<UiLanguage | und
     detail: LANGUAGE_DETAILS[id],
   }));
   const picked = await vscode.window.showQuickPick(items, {
-    title: 'ErrorBuddy: In which language should errors be explained?',
-    placeHolder: 'Choose your language — you can change it later with "ErrorBuddy: Choose Explanation Language"',
+    title: 'ErrorDost: In which language should errors be explained?',
+    placeHolder: 'Choose your language — you can change it later with "ErrorDost: Choose Explanation Language"',
     matchOnDetail: true,
     ignoreFocusOut: true,
   });
   if (!picked) return undefined;
   await vscode.workspace
-    .getConfiguration('errorbuddy')
+    .getConfiguration('errordost')
     .update('language', picked.id, vscode.ConfigurationTarget.Global);
   return picked.id;
 }
@@ -57,13 +57,13 @@ export async function ensureLanguage(): Promise<UiLanguage> {
   return (await pickLanguage('')) ?? 'english';
 }
 
-/** `errorbuddy.chooseLanguage` — change the explanation language at any time. */
+/** `errordost.chooseLanguage` — change the explanation language at any time. */
 export function registerChooseLanguageCommand(ctx: vscode.ExtensionContext): void {
   ctx.subscriptions.push(
-    vscode.commands.registerCommand('errorbuddy.chooseLanguage', async () => {
+    vscode.commands.registerCommand('errordost.chooseLanguage', async () => {
       const picked = await pickLanguage(getConfig().language);
       if (picked) {
-        vscode.window.showInformationMessage(`ErrorBuddy: errors will now be explained in ${LANGUAGE_LABELS[picked]}.`);
+        vscode.window.showInformationMessage(`ErrorDost: errors will now be explained in ${LANGUAGE_LABELS[picked]}.`);
       }
     }),
   );

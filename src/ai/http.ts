@@ -73,7 +73,7 @@ export async function postJson(url: string, opts: PostJsonOptions): Promise<unkn
 }
 
 function hintFor(status: number): string {
-  if (status === 401 || status === 403) return ' — check your API key (run "ErrorBuddy: Set AI API Key").';
+  if (status === 401 || status === 403) return ' — check your API key (run "ErrorDost: Set AI API Key").';
   if (status === 429) return ' — rate limited or out of quota; try again later.';
   return '';
 }

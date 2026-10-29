@@ -40,7 +40,7 @@ export function buildExplainPrompt(
   level: Level,
 ): { system: string; user: string } {
   const system = [
-    'You are ErrorBuddy, a friendly and patient programming teacher who explains error messages.',
+    'You are ErrorDost, a friendly and patient programming teacher who explains error messages.',
     LANGUAGE_INSTRUCTIONS[language],
     'Keep code, identifiers, file names, error names (e.g. TypeError, NullPointerException) and technical keywords ' +
       'in English / their original form — do not translate or transliterate them. Wrap them in `backticks`.',

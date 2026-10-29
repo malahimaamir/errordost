@@ -4,7 +4,7 @@ import { getConfig } from '../config';
 import type { ExplainService } from '../explain/explainService';
 import { sanitizeSnippet } from '../explain/sanitize';
 
-const EXPLAIN_DIAGNOSTIC = 'errorbuddy.explainDiagnostic';
+const EXPLAIN_DIAGNOSTIC = 'errordost.explainDiagnostic';
 const SELECTORS: vscode.DocumentSelector = [{ scheme: 'file' }, { scheme: 'untitled' }];
 const MAX_ACTIONS = 3;
 const TERMINAL_OUTPUT_CAP = 20_000;
@@ -25,9 +25,9 @@ export function registerTriggers(ctx: vscode.ExtensionContext, service: ExplainS
     vscode.commands.registerCommand(EXPLAIN_DIAGNOSTIC, (uri: vscode.Uri | string, diag: DiagnosticArg) =>
       explainDiagnostic(service, uri, diag),
     ),
-    vscode.commands.registerCommand('errorbuddy.explainSelection', () => explainSelection(service)),
-    vscode.commands.registerCommand('errorbuddy.explainText', () => explainText(service)),
-    vscode.commands.registerCommand('errorbuddy.explainTerminalSelection', () => explainTerminalSelection(service)),
+    vscode.commands.registerCommand('errordost.explainSelection', () => explainSelection(service)),
+    vscode.commands.registerCommand('errordost.explainText', () => explainText(service)),
+    vscode.commands.registerCommand('errordost.explainTerminalSelection', () => explainTerminalSelection(service)),
     vscode.languages.registerCodeActionsProvider(SELECTORS, new ExplainCodeActionProvider(), {
       providedCodeActionKinds: [vscode.CodeActionKind.QuickFix],
     }),
@@ -102,7 +102,7 @@ class ExplainCodeActionProvider implements vscode.CodeActionProvider {
     const actions: vscode.CodeAction[] = [];
     for (const d of context.diagnostics) {
       if (!isExplainable(d)) continue;
-      const action = new vscode.CodeAction('💡 Explain this error (ErrorBuddy)', vscode.CodeActionKind.QuickFix);
+      const action = new vscode.CodeAction('💡 Explain this error (ErrorDost)', vscode.CodeActionKind.QuickFix);
       action.isPreferred = false;
       action.diagnostics = [d];
       action.command = {
@@ -130,7 +130,7 @@ class ExplainHoverProvider implements vscode.HoverProvider {
     md.isTrusted = { enabledCommands: [EXPLAIN_DIAGNOSTIC] };
     diags.forEach((d, i) => {
       const args = encodeURIComponent(JSON.stringify([doc.uri.toString(), toPlainDiagnostic(d)]));
-      const label = diags.length > 1 ? `💡 Explain with ErrorBuddy (${i + 1})` : '💡 Explain with ErrorBuddy';
+      const label = diags.length > 1 ? `💡 Explain with ErrorDost (${i + 1})` : '💡 Explain with ErrorDost';
       md.appendMarkdown(`${i ? '  \n' : ''}[${label}](command:${EXPLAIN_DIAGNOSTIC}?${args} "Explain this error in your language")`);
     });
     return new vscode.Hover(md, diags[0].range);
@@ -168,7 +168,7 @@ async function explainText(service: ExplainService): Promise<void> {
   // InputBox is single-line: prefill a flattened preview; if accepted unchanged, use the full clipboard text.
   const prefill = clipboard && ERROR_HINT.test(clipboard) ? clipboard.replace(/\s*\n\s*/g, ' ').slice(0, 500) : '';
   const value = await vscode.window.showInputBox({
-    title: 'ErrorBuddy: Explain an error',
+    title: 'ErrorDost: Explain an error',
     placeHolder: 'Paste an error message…',
     prompt: 'Paste the error text (from a terminal, browser console, compiler…). Tip: select error text in an editor and use "Explain Selected Error" for long traces.',
     value: prefill,
@@ -321,7 +321,7 @@ function registerTerminalWatcher(ctx: vscode.ExtensionContext, service: ExplainS
     const explain = 'Explain';
     const never = "Don't ask again";
     const pick = await vscode.window.showInformationMessage(
-      `ErrorBuddy: The command \`${shown}\` failed. Explain the error?`,
+      `ErrorDost: The command \`${shown}\` failed. Explain the error?`,
       explain,
       never,
     );
@@ -329,10 +329,10 @@ function registerTerminalWatcher(ctx: vscode.ExtensionContext, service: ExplainS
       await service.explain({ message: block, origin: 'terminal', source: commandLine || undefined });
     } else if (pick === never) {
       await vscode.workspace
-        .getConfiguration('errorbuddy')
+        .getConfiguration('errordost')
         .update('terminal.enabled', false, vscode.ConfigurationTarget.Global);
       void vscode.window.showInformationMessage(
-        'ErrorBuddy will no longer watch the terminal. Re-enable it with the "errorbuddy.terminal.enabled" setting.',
+        'ErrorDost will no longer watch the terminal. Re-enable it with the "errordost.terminal.enabled" setting.',
       );
     }
   }

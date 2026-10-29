@@ -4,7 +4,7 @@ import { registerTriggers } from './triggers';
 import { registerSetApiKeyCommand } from './commands/setApiKey';
 import { ensureLanguage, registerChooseLanguageCommand } from './util/language';
 
-const WELCOMED_KEY = 'errorbuddy.welcomed';
+const WELCOMED_KEY = 'errordost.welcomed';
 
 export function activate(ctx: vscode.ExtensionContext): void {
   const service = new ExplainService(ctx);
@@ -15,9 +15,9 @@ export function activate(ctx: vscode.ExtensionContext): void {
   registerChooseLanguageCommand(ctx);
 
   ctx.subscriptions.push(
-    vscode.commands.registerCommand('errorbuddy.clearCache', async () => {
+    vscode.commands.registerCommand('errordost.clearCache', async () => {
       await service.clearCache();
-      vscode.window.showInformationMessage('ErrorBuddy: explanation cache cleared.');
+      vscode.window.showInformationMessage('ErrorDost: explanation cache cleared.');
     }),
   );
 
@@ -32,11 +32,11 @@ async function welcome(ctx: vscode.ExtensionContext): Promise<void> {
   await ensureLanguage();
   const tryIt = 'Try it';
   const choice = await vscode.window.showInformationMessage(
-    'ErrorBuddy is ready. Click the 💡 on any error, or right-click selected error text → Explain.',
+    'ErrorDost is ready. Click the 💡 on any error, or right-click selected error text → Explain.',
     tryIt,
   );
   if (choice === tryIt) {
-    await vscode.commands.executeCommand('errorbuddy.explainText');
+    await vscode.commands.executeCommand('errordost.explainText');
   }
 }
 

@@ -1,5 +1,5 @@
 /**
- * ErrorBuddy offline knowledge base.
+ * ErrorDost offline knowledge base.
  * Pure module: no `vscode` import, so it can be unit-tested with plain Node.
  */
 import type { ErrorContext, KbEntry } from '../types';

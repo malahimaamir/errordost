@@ -13,7 +13,7 @@ const PROVIDER_INFO: Record<KeyProviderId, { label: string; url: string }> = {
 };
 
 export function registerSetApiKeyCommand(ctx: vscode.ExtensionContext): void {
-  ctx.subscriptions.push(vscode.commands.registerCommand('errorbuddy.setApiKey', () => setApiKey(ctx)));
+  ctx.subscriptions.push(vscode.commands.registerCommand('errordost.setApiKey', () => setApiKey(ctx)));
 }
 
 async function setApiKey(ctx: vscode.ExtensionContext): Promise<void> {
@@ -29,7 +29,7 @@ async function setApiKey(ctx: vscode.ExtensionContext): Promise<void> {
   }
 
   const picked = await vscode.window.showQuickPick(items, {
-    title: 'ErrorBuddy: Set API Key',
+    title: 'ErrorDost: Set API Key',
     placeHolder: 'Which AI provider is this key for?',
     matchOnDetail: true,
   });
@@ -37,7 +37,7 @@ async function setApiKey(ctx: vscode.ExtensionContext): Promise<void> {
 
   const name = PROVIDER_INFO[picked.id].label;
   const key = await vscode.window.showInputBox({
-    title: `ErrorBuddy: ${name} API key`,
+    title: `ErrorDost: ${name} API key`,
     prompt: `Paste your ${name} API key. It is stored securely in VS Code's secret storage.`,
     password: true,
     ignoreFocusOut: true,
@@ -50,7 +50,7 @@ async function setApiKey(ctx: vscode.ExtensionContext): Promise<void> {
     const choice = await vscode.window.showWarningMessage(`No key entered for ${name}.`, remove);
     if (choice === remove) {
       await ctx.secrets.delete(secretKey(picked.id));
-      vscode.window.showInformationMessage(`ErrorBuddy: ${name} API key removed.`);
+      vscode.window.showInformationMessage(`ErrorDost: ${name} API key removed.`);
     }
     return;
   }
@@ -60,16 +60,16 @@ async function setApiKey(ctx: vscode.ExtensionContext): Promise<void> {
   if (getConfig().aiProvider !== picked.id) {
     const yes = 'Yes';
     const choice = await vscode.window.showInformationMessage(
-      `${name} API key saved. Use ${name} as your ErrorBuddy AI provider?`,
+      `${name} API key saved. Use ${name} as your ErrorDost AI provider?`,
       yes,
       'No',
     );
     if (choice === yes) {
       await vscode.workspace
-        .getConfiguration('errorbuddy')
+        .getConfiguration('errordost')
         .update('aiProvider', picked.id, vscode.ConfigurationTarget.Global);
     }
   } else {
-    vscode.window.showInformationMessage(`ErrorBuddy: ${name} API key saved.`);
+    vscode.window.showInformationMessage(`ErrorDost: ${name} API key saved.`);
   }
 }
