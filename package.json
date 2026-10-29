@@ -1,0 +1,281 @@
+{
+  "name": "errorbuddy",
+  "displayName": "ErrorBuddy – Explain Errors in Urdu, Hindi, Arabic & English",
+  "description": "One-click, beginner-friendly error explanations in Urdu, Roman Urdu, Hindi, Arabic or English: what it means, why it happened and how to fix it. Works offline for common errors and uses your own AI (Copilot, Claude, Ollama…) for the rest. JS/TS, Python, HTML, CSS, Java, C/C++, PHP.",
+  "version": "0.1.0",
+  "publisher": "malahimaamir",
+  "author": {
+    "name": "Malahima Amir"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/malahimaamir/errorbuddy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/malahimaamir/errorbuddy/issues"
+  },
+  "homepage": "https://github.com/malahimaamir/errorbuddy#readme",
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Education",
+    "Other"
+  ],
+  "keywords": [
+    "error",
+    "explain error",
+    "error explainer",
+    "error message",
+    "urdu",
+    "roman urdu",
+    "hindi",
+    "arabic",
+    "beginner",
+    "students",
+    "learn programming",
+    "debugging",
+    "debug",
+    "stack trace",
+    "exception",
+    "compiler error",
+    "typescript",
+    "javascript",
+    "python",
+    "html",
+    "css",
+    "java",
+    "c++",
+    "php",
+    "ai",
+    "copilot",
+    "claude",
+    "ollama",
+    "offline",
+    "translate"
+  ],
+  "galleryBanner": {
+    "color": "#F2643D",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "errorbuddy.explainSelection",
+        "title": "Explain Selected Error",
+        "category": "ErrorBuddy"
+      },
+      {
+        "command": "errorbuddy.explainText",
+        "title": "Explain an Error (paste)",
+        "category": "ErrorBuddy"
+      },
+      {
+        "command": "errorbuddy.chooseLanguage",
+        "title": "Choose Explanation Language",
+        "category": "ErrorBuddy"
+      },
+      {
+        "command": "errorbuddy.setApiKey",
+        "title": "Set AI API Key",
+        "category": "ErrorBuddy"
+      },
+      {
+        "command": "errorbuddy.clearCache",
+        "title": "Clear Explanation Cache",
+        "category": "ErrorBuddy"
+      },
+      {
+        "command": "errorbuddy.explainDiagnostic",
+        "title": "Explain This Error",
+        "category": "ErrorBuddy"
+      },
+      {
+        "command": "errorbuddy.explainTerminalSelection",
+        "title": "Explain Selected Error",
+        "category": "ErrorBuddy"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "errorbuddy.explainDiagnostic",
+          "when": "false"
+        },
+        {
+          "command": "errorbuddy.explainTerminalSelection",
+          "when": "false"
+        },
+        {
+          "command": "errorbuddy.explainSelection",
+          "when": "editorHasSelection"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "errorbuddy.explainSelection",
+          "when": "editorHasSelection",
+          "group": "errorbuddy"
+        }
+      ],
+      "terminal/context": [
+        {
+          "command": "errorbuddy.explainTerminalSelection",
+          "when": "terminalTextSelected",
+          "group": "errorbuddy"
+        },
+        {
+          "command": "errorbuddy.explainText",
+          "when": "!terminalTextSelected",
+          "group": "errorbuddy"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "ErrorBuddy",
+      "properties": {
+        "errorbuddy.language": {
+          "type": "string",
+          "enum": [
+            "",
+            "english",
+            "urdu",
+            "roman-urdu",
+            "hindi",
+            "arabic"
+          ],
+          "enumItemLabels": [
+            "(ask me on first use)",
+            "English",
+            "اردو (Urdu)",
+            "Roman Urdu",
+            "हिन्दी (Hindi)",
+            "العربية (Arabic)"
+          ],
+          "enumDescriptions": [
+            "Not chosen yet: ErrorBuddy asks the first time it runs.",
+            "English: simple, plain English.",
+            "اردو: Urdu in Nastaliq script, right-to-left.",
+            "Roman Urdu: Urdu written in English letters (e.g. \"Yeh error is liye aaya...\").",
+            "हिन्दी: Hindi in Devanagari script.",
+            "العربية: Arabic, right-to-left."
+          ],
+          "default": "",
+          "markdownDescription": "Language errors are explained in. Leave empty to be asked on first use. Change it any time with **ErrorBuddy: Choose Explanation Language**.",
+          "order": 0
+        },
+        "errorbuddy.level": {
+          "type": "string",
+          "enum": [
+            "beginner",
+            "pro"
+          ],
+          "enumDescriptions": [
+            "Simple words, no jargon, step-by-step fixes. Ideal for students.",
+            "Short and technical, for experienced developers."
+          ],
+          "default": "beginner",
+          "description": "How detailed and technical the explanations are.",
+          "order": 1
+        },
+        "errorbuddy.aiProvider": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "copilot",
+            "claude-code",
+            "claude",
+            "openai",
+            "gemini",
+            "ollama",
+            "none"
+          ],
+          "enumDescriptions": [
+            "Use the first available: GitHub Copilot → Claude Code → Ollama → an API key you saved.",
+            "GitHub Copilot via the VS Code Language Model API (no API key needed).",
+            "Claude Code CLI: uses your existing Claude Code login, no API key needed.",
+            "Anthropic Claude: requires an API key (ErrorBuddy: Set AI API Key).",
+            "OpenAI: requires an API key (ErrorBuddy: Set AI API Key).",
+            "Google Gemini: requires an API key (ErrorBuddy: Set AI API Key).",
+            "Local Ollama server: free and fully offline.",
+            "No AI: only the built-in offline knowledge base of common errors."
+          ],
+          "default": "auto",
+          "description": "AI used for errors that are not in the offline knowledge base. Only the error message and a few sanitized lines around it are sent.",
+          "order": 2
+        },
+        "errorbuddy.model": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Optional model name override for the selected provider (e.g. `gpt-4o-mini`, `llama3.1`, `sonnet`). Leave empty for the provider's default. Ignored when **AI Provider** is `auto`.",
+          "order": 3
+        },
+        "errorbuddy.ollamaUrl": {
+          "type": "string",
+          "default": "http://localhost:11434",
+          "description": "Base URL of your Ollama server.",
+          "order": 4,
+          "scope": "machine"
+        },
+        "errorbuddy.claudeCodePath": {
+          "type": "string",
+          "default": "claude",
+          "scope": "machine",
+          "markdownDescription": "Command or full path of the Claude Code CLI, used when **AI Provider** is `claude-code` or `auto`.",
+          "order": 5
+        },
+        "errorbuddy.knowledgeBaseFirst": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the offline answer instantly when a common error is recognized (with a button to ask AI for more). Turn off to always ask AI first.",
+          "order": 6
+        },
+        "errorbuddy.terminal.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Offer to explain when a command in the integrated terminal fails (needs terminal shell integration).",
+          "order": 7
+        },
+        "errorbuddy.codeActions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show an \"Explain this error\" 💡 quick fix on errors and warnings in the editor.",
+          "order": 8
+        },
+        "errorbuddy.hover.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show an \"Explain with ErrorBuddy\" link when hovering over an error.",
+          "order": 9
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/unit/*.test.ts",
+    "vscode:prepublish": "npm run package",
+    "vsix": "vsce package",
+    "publish:vsce": "vsce publish",
+    "publish:ovsx": "ovsx publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/vscode": "^1.93.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "ovsx": "^0.10.12",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

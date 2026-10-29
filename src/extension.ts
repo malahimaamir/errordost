@@ -1,0 +1,45 @@
+import * as vscode from 'vscode';
+import { ExplainService } from './explain/explainService';
+import { registerTriggers } from './triggers';
+import { registerSetApiKeyCommand } from './commands/setApiKey';
+import { ensureLanguage, registerChooseLanguageCommand } from './util/language';
+
+const WELCOMED_KEY = 'errorbuddy.welcomed';
+
+export function activate(ctx: vscode.ExtensionContext): void {
+  const service = new ExplainService(ctx);
+  ctx.subscriptions.push(service);
+
+  registerTriggers(ctx, service);
+  registerSetApiKeyCommand(ctx);
+  registerChooseLanguageCommand(ctx);
+
+  ctx.subscriptions.push(
+    vscode.commands.registerCommand('errorbuddy.clearCache', async () => {
+      await service.clearCache();
+      vscode.window.showInformationMessage('ErrorBuddy: explanation cache cleared.');
+    }),
+  );
+
+  if (!ctx.globalState.get<boolean>(WELCOMED_KEY)) {
+    void welcome(ctx);
+  }
+}
+
+/** First run: ask for the explanation language, then show a short hint. */
+async function welcome(ctx: vscode.ExtensionContext): Promise<void> {
+  await ctx.globalState.update(WELCOMED_KEY, true);
+  await ensureLanguage();
+  const tryIt = 'Try it';
+  const choice = await vscode.window.showInformationMessage(
+    'ErrorBuddy is ready. Click the 💡 on any error, or right-click selected error text → Explain.',
+    tryIt,
+  );
+  if (choice === tryIt) {
+    await vscode.commands.executeCommand('errorbuddy.explainText');
+  }
+}
+
+export function deactivate(): void {
+  // Everything is disposed through ctx.subscriptions.
+}
