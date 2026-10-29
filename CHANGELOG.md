@@ -2,6 +2,12 @@
 
 All notable changes to ErrorDost are documented here. This project follows [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] - 2026-10-29
+
+### Fixed
+
+- Some AI answers (seen in Arabic) were shown as raw JSON when the model left quotes unescaped. They are now parsed correctly, the prompt asks for valid JSON, and answers cached by 0.1.0 are cleared.
+
 ## [0.1.0] - 2026-10-29
 
 ### Added

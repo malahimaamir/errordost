@@ -9,6 +9,8 @@ const WELCOMED_KEY = 'errordost.welcomed';
 export function activate(ctx: vscode.ExtensionContext): void {
   const service = new ExplainService(ctx);
   ctx.subscriptions.push(service);
+  // Drop the v0.1.0 cache, which could hold answers the old parser got wrong.
+  void ctx.globalState.update('errordost.cache', undefined);
 
   registerTriggers(ctx, service);
   registerSetApiKeyCommand(ctx);

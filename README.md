@@ -2,6 +2,8 @@
 
 **Got an error you don't understand? One click, and ErrorDost explains it in your language.**
 
+![ErrorDost explaining a TypeScript error in Roman Urdu and Urdu](media/demo.gif)
+
 ErrorDost turns confusing compiler, linter and runtime errors into a short, friendly explanation in **English, Urdu (اردو), Roman Urdu, Hindi (हिन्दी) or Arabic (العربية)**:
 
 - **Meaning:** what the error is saying, in plain words

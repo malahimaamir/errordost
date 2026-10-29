@@ -47,7 +47,8 @@ export function buildExplainPrompt(
     LEVEL_INSTRUCTIONS[level],
     'Ground your answer in the given error message and code snippet (the line marked ">>" is where the error was reported). ' +
       'Never invent APIs, functions, options or file contents. If something is uncertain, say what to check instead of guessing.',
-    'Respond ONLY with a single JSON object, no markdown fences and no text before or after it, in exactly this shape:',
+    'Respond ONLY with a single valid JSON object, no markdown fences and no text before or after it, in exactly this shape ' +
+      '(escape every double quote inside a string value as \\" — or use single quotes or backticks there instead):',
     JSON_SHAPE,
     '"meaning": what the error means. "cause": why it happened here. "fix": ordered, actionable steps. ' +
       '"codeExample" is optional: include it only when a short code example truly helps; "bad" shows the problem, ' +
@@ -89,7 +90,45 @@ export function parseExplanation(raw: string): ParsedExplanation {
       return result;
     }
   }
-  return fromPlainText(text);
+  return fromLooseKeys(text) ?? fromPlainText(text);
+}
+
+const NEXT_KEY = '(?:meaning|explanation|what|cause|why|reason|fix|steps|codeExample|example)';
+
+/**
+ * Last resort for JSON the model broke — usually unescaped quotes inside a string,
+ * e.g. `"Add "ignoreDeprecations": "6.0""`. Each value is cut at the next known key.
+ */
+function fromLooseKeys(text: string): ParsedExplanation | undefined {
+  const value = (keys: string): string => {
+    const re = new RegExp(`"(?:${keys})"\\s*:\\s*"([\\s\\S]*?)"\\s*(?=,\\s*"${NEXT_KEY}"\\s*:|\\})`);
+    const m = re.exec(text);
+    return m ? unescapeLoose(m[1]).trim() : '';
+  };
+  const meaning = value('meaning|explanation|what');
+  if (!meaning) {
+    return undefined;
+  }
+  const cause = value('cause|why|reason');
+
+  const fixBody = /"(?:fix|steps)"\s*:\s*\[([\s\S]*?)\]\s*(?=,\s*"(?:codeExample|example)"\s*:|\})/.exec(text)?.[1] ?? '';
+  const fix = fixBody
+    .split(/"\s*,\s*"/)
+    .map(s => unescapeLoose(s.replace(/^\s*"|"\s*$/g, '')).trim())
+    .filter(Boolean);
+
+  const good = /"good"\s*:\s*"([\s\S]*?)"\s*\}/.exec(text)?.[1];
+  const bad = /"bad"\s*:\s*"([\s\S]*?)"\s*,\s*"good"/.exec(text)?.[1];
+  const result: ParsedExplanation = { meaning, cause, fix };
+  if (good) {
+    result.codeExample = { good: unescapeLoose(good) };
+    if (bad) result.codeExample.bad = unescapeLoose(bad);
+  }
+  return result;
+}
+
+function unescapeLoose(s: string): string {
+  return s.replace(/\\(["\\/nt])/g, (_m, c: string) => (c === 'n' ? '\n' : c === 't' ? '\t' : c));
 }
 
 /** Fenced block contents first, then the first balanced {...} in the whole text. */

@@ -9,7 +9,8 @@ import { ExplainPanel } from '../ui/explainPanel';
 import { redactSecrets, sanitizeMessage } from './sanitize';
 import { buildExplainPrompt, parseExplanation } from './explainPrompt';
 
-const CACHE_KEY = 'errordost.cache';
+// Bump the version suffix when the parser changes so answers parsed by an older version are dropped.
+const CACHE_KEY = 'errordost.cache.v2';
 const CACHE_MAX = 200;
 const KB_LABEL = 'Offline knowledge base';
 

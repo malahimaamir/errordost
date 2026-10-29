@@ -27,7 +27,8 @@ test('prompt contains a script-specific instruction per language', () => {
 test('prompt keeps technical terms in English and asks for JSON only', () => {
   const { system } = buildExplainPrompt(err, 'hindi', 'pro');
   assert.match(system, /error names/i);
-  assert.match(system, /ONLY with a single JSON object/);
+  assert.match(system, /ONLY with a single valid JSON object/);
+  assert.match(system, /escape every double quote/);
   assert.match(system, /"meaning"/);
   assert.match(system, /Never invent APIs/);
 });
@@ -93,4 +94,17 @@ test('never throws on garbage', () => {
   }
   // Non-string input from a misbehaving provider.
   assert.doesNotThrow(() => parseExplanation(undefined as unknown as string));
+});
+
+test('recovers JSON broken by unescaped quotes inside values (seen with Arabic answers)', () => {
+  const raw =
+    '{"meaning": "هذا الخطأ يعني أن الخيار قديم.", "cause": "خيار قديم في `tsconfig.json`.", ' +
+    '"fix": ["افتح `tsconfig.json`.", "أضف "ignoreDeprecations": "6.0" داخل `compilerOptions`."], ' +
+    '"codeExample": {"bad": "\\"moduleResolution\\": \\"node\\"", "good": "\\"ignoreDeprecations\\": \\"6.0\\""}}';
+  const r = parseExplanation(raw);
+  assert.equal(r.meaning, 'هذا الخطأ يعني أن الخيار قديم.');
+  assert.equal(r.cause, 'خيار قديم في `tsconfig.json`.');
+  assert.deepEqual(r.fix, ['افتح `tsconfig.json`.', 'أضف "ignoreDeprecations": "6.0" داخل `compilerOptions`.']);
+  assert.equal(r.codeExample?.good, '"ignoreDeprecations": "6.0"');
+  assert.equal(r.codeExample?.bad, '"moduleResolution": "node"');
 });

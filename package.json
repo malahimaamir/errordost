@@ -2,7 +2,7 @@
   "name": "errordost",
   "displayName": "ErrorDost – Explain Errors in Urdu, Hindi, Arabic & English",
   "description": "One-click, beginner-friendly error explanations in Urdu, Roman Urdu, Hindi, Arabic or English: what it means, why it happened and how to fix it. Works offline for common errors and uses your own AI (Copilot, Claude, Ollama…) for the rest. JS/TS, Python, HTML, CSS, Java, C/C++, PHP.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "malahimaamir",
   "author": {
     "name": "Malahima Amir"
