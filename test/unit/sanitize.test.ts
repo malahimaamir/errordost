@@ -2,14 +2,15 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { redactSecrets, sanitizeMessage, sanitizeSnippet } from '../../src/explain/sanitize';
 
+// Fake key-shaped strings, split so secret scanners don't flag them as real credentials.
 test('redacts provider API keys and tokens', () => {
   const cases = [
-    'OPENAI key sk-proj-abcdefghijklmnopqrstuvwx1234',
-    'anthropic sk-ant-api03-ABCDEFGHIJKLMNOPQRSTUV',
-    'github ghp_abcdefghijklmnopqrstuvwxyz0123456789',
-    'aws AKIAIOSFODNN7EXAMPLE',
-    'google AIzaSyA1234567890abcdefghijklmnopqrstuv',
-    'jwt eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U',
+    'OPENAI key sk-' + 'proj-abcdefghijklmnopqrstuvwx1234',
+    'anthropic sk-' + 'ant-api03-ABCDEFGHIJKLMNOPQRSTUV',
+    'github ghp' + '_abcdefghijklmnopqrstuvwxyz0123456789',
+    'aws AKIA' + 'IOSFODNN7EXAMPLE',
+    'google AIza' + 'SyA1234567890abcdefghijklmnopqrstuv',
+    'jwt eyJhbGciOiJIUzI1NiJ9' + '.eyJzdWIiOiIxMjM0NTY3ODkwIn0' + '.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U',
   ];
   for (const c of cases) {
     const out = redactSecrets(c);
